@@ -182,6 +182,9 @@ export default function App() {
     : 0;
   const selected = run?.questions[run.index];
   const answered = selected && run ? run.answers[selected.id] : undefined;
+  const unansweredCount = run
+    ? run.questions.filter((q) => run.answers[q.id] === undefined).length
+    : 0;
   const isLearning = run?.mode === "learn";
   const shown = pool.filter(
     (q) =>
@@ -1258,8 +1261,11 @@ export default function App() {
           >
             <h2 id="finish-title">Bereit für deine Auswertung?</h2>
             <p>
-              {run.questions.length - Object.keys(run.answers).length} Fragen
-              sind noch unbeantwortet. Diese werden als falsch gewertet.
+              {unansweredCount === 0
+                ? "Du hast alle Fragen beantwortet. Du kannst deinen Test jetzt auswerten."
+                : unansweredCount === 1
+                  ? "Eine Frage ist noch unbeantwortet. Sie wird als falsch gewertet."
+                  : `${unansweredCount} Fragen sind noch unbeantwortet. Diese werden als falsch gewertet.`}
             </p>
             <div className="actions">
               <button
