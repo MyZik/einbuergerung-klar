@@ -1,5 +1,6 @@
 import { useDialogFocus } from "./useDialogFocus";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { acceptsAnswerClick } from "./answerInteraction";
 import type { CSSProperties } from "react";
 import {
   ArrowRight,
@@ -110,6 +111,7 @@ export default function App() {
   const [saved, setSaved] = useStored<string[]>("saved", []);
   const [history, setHistory] = useStored<TestResult[]>("history", []);
   const [run, setRun] = useStored<Run | null>("run", null);
+  const answerReadyAt = useRef(0);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
@@ -228,6 +230,8 @@ export default function App() {
         setNotice("Hier gibt es noch keine Fragen.");
         return;
       }
+      // A second click on the start/retry button must not answer the new question.
+      answerReadyAt.current = performance.now() + 400;
       setRun({
         mode,
         questions: qs,
@@ -808,7 +812,17 @@ export default function App() {
                           aria-pressed={answered === i}
                           disabled={isLearning && answered !== undefined}
                           className={`answer ${answered === i ? "selected" : ""} ${isLearning && answered !== undefined ? (i === selected.correct_answer ? "correct" : i === answered ? "incorrect" : "") : ""}`}
-                          onClick={() => answer(i)}
+                          onClick={(event) => {
+                            if (
+                              acceptsAnswerClick(
+                                event.detail,
+                                performance.now(),
+                                answerReadyAt.current,
+                              )
+                            ) {
+                              answer(i);
+                            }
+                          }}
                         >
                           <span className="answer-letter">{"ABCD"[i]}</span>
                           <span>{a}</span>
