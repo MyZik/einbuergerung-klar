@@ -50,10 +50,10 @@ import { Admin } from "./Admin";
 type View = "home" | "catalog" | "tests" | "saved" | "progress" | "admin";
 const nav = [
   { id: "home", label: "Übersicht", icon: House },
-  { id: "catalog", label: "Fragen lernen", icon: BookOpen },
-  { id: "tests", label: "Test machen", icon: Target },
+  { id: "catalog", label: "Lernen", icon: BookOpen },
+  { id: "tests", label: "Tests", icon: Target },
   { id: "saved", label: "Merkliste", icon: Bookmark },
-  { id: "progress", label: "Mein Fortschritt", icon: ChartNoAxesCombined },
+  { id: "progress", label: "Fortschritt", icon: ChartNoAxesCombined },
 ] as const;
 function useStored<T>(key: string, initial: T) {
   const [value, set] = useState<T>(() => readStorage(key, initial));
@@ -62,25 +62,42 @@ function useStored<T>(key: string, initial: T) {
   }, [key, value]);
   return [value, set] as const;
 }
-function City() {
+function LearningIllustration() {
   return (
-    <svg className="city" viewBox="0 0 440 270" fill="none" aria-hidden="true">
-      <circle cx="250" cy="125" r="98" fill="#d4e9b5" opacity=".11" />
-      <circle cx="346" cy="64" r="18" fill="#d7ebb9" />
-      <g stroke="#bbd7a5" strokeWidth="1.7" strokeLinejoin="round">
-        <path d="M20 225h399M48 217v-54h56v54m-46-54 19-15 17 15M116 217V97l21-15 21 15v120m-35-115h28m-26 7v25m15-25v25M177 217v-75h77v75m-67-75 28-21 29 21M203 121V56h23v65m-19-65 8-29 8 29m-8-29V15m-6 65h12M270 217v-85h85v85m-78-85 32-44 40 44M295 104V69h27v35m-31 63h43m-43 11h43m-43 11h43M363 217v-64h42v64m-42-64 20-19 22 19" />
-        <path
-          d="M56 225c15 13 25 13 40 0 15 13 25 13 40 0 15 13 25 13 40 0 15 13 25 13 40 0 15 13 25 13 40 0 15 13 25 13 40 0 15 13 25 13 40 0M165 240c14 7 27 7 40 0m22 0c14 7 27 7 40 0m22 0c14 7 27 7 40 0"
-          opacity=".6"
-        />
-        <path d="M190 216v-32a12 12 0 0 1 24 0v32m10 0v-32a12 12 0 0 1 24 0v32" />
-      </g>
-      <g fill="#e1efc6">
-        <circle cx="84" cy="93" r="3" />
-        <circle cx="373" cy="114" r="3" />
-        <path d="m175 61 3 7 7 3-7 3-3 7-3-7-7-3 7-3z" />
-      </g>
-    </svg>
+    <div className="learning-art" aria-hidden="true">
+      <div className="art-orbit" />
+      <span className="art-star">✳</span>
+      <div className="art-back">
+        <span>DEIN NÄCHSTES KAPITEL</span>
+        <BookOpen size={72} strokeWidth={1} />
+      </div>
+      <div className="art-card">
+        <span className="art-kicker">EINBÜRGERUNG · DEIN LERNWEG</span>
+        <div className="art-rule" />
+        <h3>
+          Was uns
+          <br />
+          zusammenbringt.
+        </h3>
+        <div className="art-answer">
+          <span>01</span> Demokratie verstehen.
+        </div>
+        <div className="art-answer">
+          <span>02</span> Geschichte entdecken.
+        </div>
+        <div className="art-answer chosen">
+          <span>03</span> Zusammenleben gestalten. <Check size={17} />
+        </div>
+        <span className="art-page">
+          WISSEN ÖFFNET TÜREN. <ArrowRight size={18} />
+        </span>
+      </div>
+      <div className="art-stamp">
+        DEIN WEG.
+        <br />
+        <strong>DEIN TEMPO.</strong>
+      </div>
+    </div>
   );
 }
 export default function App() {
@@ -264,52 +281,45 @@ export default function App() {
   }
   const home = (
     <>
-      <div className="eyebrow">
-        <span className="dot" /> DEIN WEG ZUR EINBÜRGERUNG
-      </div>
-      <div className="page-heading">
-        <div>
-          <h1>
-            Schritt für Schritt.
-            <br />
-            Mit einem guten Gefühl.
-          </h1>
-          <p>Mach dich bereit für deinen Einbürgerungstest.</p>
-        </div>
-        <span className="soft-pill">
-          <ShieldCheck size={15} /> Amtlicher Fragenkatalog
-        </span>
-      </div>
       <section className="hero">
         <div className="hero-copy">
           <span className="hero-label">
-            <Sparkles size={15} /> DEIN NÄCHSTER SCHRITT
+            <span className="chapter-mark">01 /</span> BEREIT FÜR DEIN NÄCHSTES
+            KAPITEL
           </span>
-          <h2>
-            Heute ein bisschen lernen.
+          <h1>
+            Deutschland verstehen.
             <br />
-            Morgen sicherer sein.
-          </h2>
+            <em>Mit Sicherheit</em>
+            <br />
+            ankommen.
+          </h1>
           <p>
-            Eine Frage nach der anderen – in deinem Tempo.
-            <br className="desktop" /> Wir helfen dir, den Überblick zu
-            behalten.
+            Dein Einbürgerungstest beginnt mit einer Frage.
+            <br />
+            Lerne, entdecke und übe – Schritt für Schritt.
           </p>
-          <button
-            className="button lime"
-            onClick={() =>
-              start(
-                "learn",
-                pool.filter((q) => !progress[q.id]?.correct),
-              )
-            }
-            disabled={loading || learned === pool.length}
-          >
-            Jetzt lernen <ArrowRight size={18} />
-          </button>
-          <span className="hero-note">Ohne Anmeldung. Direkt loslegen.</span>
+          <div className="hero-actions">
+            <button
+              className="button lime"
+              onClick={() =>
+                start(
+                  "learn",
+                  pool.filter((q) => !progress[q.id]?.correct),
+                )
+              }
+              disabled={loading || learned === pool.length}
+            >
+              Jetzt lernen <ArrowRight size={18} />
+            </button>
+            <span className="hero-note">
+              Kostenlos.
+              <br />
+              Ohne Anmeldung.
+            </span>
+          </div>
         </div>
-        <City />
+        <LearningIllustration />
       </section>
       <div className="stats">
         <div className="stat">
@@ -317,7 +327,7 @@ export default function App() {
             <BookOpen />
           </span>
           <div>
-            <span>Dein Fragenkatalog</span>
+            <span>Fragen für dich</span>
             <strong>
               {pool.length}
               <small>Fragen</small>
@@ -330,7 +340,7 @@ export default function App() {
             <CheckCheck />
           </span>
           <div>
-            <span>Schon richtig beantwortet</span>
+            <span>Richtig beantwortet</span>
             <strong>
               {learned}
               <small>von {pool.length}</small>
@@ -357,8 +367,8 @@ export default function App() {
         </div>
       </div>
       <div className="section-heading">
-        <h2>Wie möchtest du üben?</h2>
-        <span>Du bestimmst das Tempo.</span>
+        <h2>Dein Lernplan. Deine Wahl.</h2>
+        <span>DREI WEGE ZU MEHR SICHERHEIT</span>
       </div>
       <div className="mode-grid">
         <button className="mode-card" onClick={() => navigate("catalog")}>
@@ -495,7 +505,7 @@ export default function App() {
           }}
         >
           <span className="brand-icon">
-            <Check strokeWidth={3} />
+            <BookOpen strokeWidth={1.8} />
           </span>
           <span>
             Einbürgerung
